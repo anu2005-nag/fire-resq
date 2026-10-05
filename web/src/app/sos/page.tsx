@@ -236,7 +236,7 @@ export default function VictimSOSPortal() {
   const lastSpokenEtaRef = useRef<number | null>(null);
   const recognitionRef = useRef<any>(null);
 
-  const [reportIncident, { loading: sendingSOS }] = useMutation(REPORT_INCIDENT);
+  const [reportIncident, { loading: sendingSOS }] = useMutation<{ reportIncident: any }>(REPORT_INCIDENT);
   const reportedIncidentId = reportedIncidentState?.id;
   const { data: incidentData } = useQuery<{ incidents: SosTrackedIncident[] }>(GET_INCIDENTS, {
     skip: !reportedIncidentId,
@@ -721,7 +721,7 @@ export default function VictimSOSPortal() {
     roadRouteSummary?.etaMinutes,
   ]);
 
-  useSubscription(ON_INCIDENT_STATUS_UPDATED, {
+  useSubscription<{ incidentStatusUpdated: any }>(ON_INCIDENT_STATUS_UPDATED, {
     onData: ({ data: subData }) => {
       const updated = subData?.data?.incidentStatusUpdated;
       if (reportedIncident && updated && updated.id === reportedIncident.id) {
@@ -735,7 +735,7 @@ export default function VictimSOSPortal() {
     },
   });
 
-  useSubscription(ON_TEAM_STATUS_UPDATED, {
+  useSubscription<{ teamStatusUpdated: any }>(ON_TEAM_STATUS_UPDATED, {
     onData: ({ data: subData }) => {
       const updated = subData?.data?.teamStatusUpdated;
       if (!updated) return;
@@ -923,7 +923,7 @@ export default function VictimSOSPortal() {
           <button
             onClick={handleSOSClick}
             disabled={sendingSOS || isProcessingVoice}
-            className="w-64 h-64 sm:w-72 sm:h-72 rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-800 text-white font-black text-3xl shadow-[0_0_60px_rgba(239,68,68,0.45)] hover:shadow-[0_0_80px_rgba(239,68,68,0.7)] active:scale-95 transition-all flex flex-col items-center justify-center gap-2 border-4 border-red-400/40 cursor-pointer disabled:opacity-75"
+            className="w-64 h-64 sm:w-72 sm:h-72 rounded-full bg-linear-to-br from-red-500 via-red-600 to-red-800 text-white font-black text-3xl shadow-[0_0_60px_rgba(239,68,68,0.45)] hover:shadow-[0_0_80px_rgba(239,68,68,0.7)] active:scale-95 transition-all flex flex-col items-center justify-center gap-2 border-4 border-red-400/40 cursor-pointer disabled:opacity-75"
           >
             <Flame className="w-16 h-16 animate-bounce" />
             <span>
@@ -1094,7 +1094,7 @@ export default function VictimSOSPortal() {
           ) : null}
 
           {reportedIncident.team ? (
-            <div className="bg-gradient-to-br from-slate-900 to-slate-950 border-2 border-emerald-500/50 p-5 rounded-2xl space-y-4 shadow-xl">
+            <div className="bg-linear-to-br from-slate-900 to-slate-950 border-2 border-emerald-500/50 p-5 rounded-2xl space-y-4 shadow-xl">
               <button
                 onClick={() => handleCallAction(reportedIncident.team.phone)}
                 className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-base rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition cursor-pointer"

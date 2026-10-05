@@ -235,13 +235,13 @@ const resolvers = {
 
   Subscription: {
     incidentCreated: {
-      subscribe: () => pubsub.asyncIterator([INCIDENT_CREATED]),
+      subscribe: () => pubsub.asyncIterableIterator([INCIDENT_CREATED]),
     },
     incidentStatusUpdated: {
-      subscribe: () => pubsub.asyncIterator([INCIDENT_STATUS_UPDATED]),
+      subscribe: () => pubsub.asyncIterableIterator([INCIDENT_STATUS_UPDATED]),
     },
     teamStatusUpdated: {
-      subscribe: () => pubsub.asyncIterator([TEAM_STATUS_UPDATED]),
+      subscribe: () => pubsub.asyncIterableIterator([TEAM_STATUS_UPDATED]),
     },
   },
 };

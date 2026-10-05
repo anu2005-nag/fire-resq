@@ -70,6 +70,29 @@ type Incident = {
   createdAt?: string | null;
 };
 
+type IncidentStatusUpdate = {
+  id: string;
+  status: string;
+  teamId?: string | null;
+  team?: Team | null;
+  reportedAt?: string | null;
+  routedAt?: string | null;
+  reachedSceneAt?: string | null;
+  containedAt?: string | null;
+  resolvedAt?: string | null;
+};
+
+type TeamStatusUpdate = {
+  id: string;
+  name?: string | null;
+  type?: string | null;
+  leaderName?: string | null;
+  phone?: string | null;
+  status: string;
+  latitude?: number | null;
+  longitude?: number | null;
+};
+
 const STATION_COORDS: [number, number] = [13.2554, 76.4782];
 
 function computeDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -380,12 +403,15 @@ export default function DispatcherDashboard() {
     phone: '',
   });
 
-  const { data, refetch } = useQuery(GET_INITIAL_DATA, {
+  const { data, refetch } = useQuery<{ incidents: Incident[]; teams: Team[] }>(GET_INITIAL_DATA, {
     pollInterval: 1200,
     fetchPolicy: 'cache-and-network',
   });
 
-  const [createTeam, { loading: creatingTeam }] = useMutation(CREATE_TEAM);
+  const [createTeam, { loading: creatingTeam }] = useMutation<
+    { createTeam: Team },
+    { name: string; type: string; leaderName: string; phone: string }
+  >(CREATE_TEAM);
   const [updateTeam, { loading: updatingTeam }] = useMutation(UPDATE_TEAM);
   const [deleteTeam] = useMutation(DELETE_TEAM);
   const [assignTeam] = useMutation(ASSIGN_TEAM);
@@ -705,7 +731,7 @@ export default function DispatcherDashboard() {
     })();
   }, []);
 
-  useSubscription(ON_INCIDENT_CREATED, {
+  useSubscription<{ incidentCreated: Incident }>(ON_INCIDENT_CREATED, {
     onData: ({ data: subData }) => {
       const created = subData?.data?.incidentCreated;
       if (created) {
@@ -717,7 +743,7 @@ export default function DispatcherDashboard() {
   });
 
   // Zero-Latency Direct In-Memory Synchronization (<50ms)
-  useSubscription(ON_INCIDENT_STATUS_UPDATED, {
+  useSubscription<{ incidentStatusUpdated: IncidentStatusUpdate }>(ON_INCIDENT_STATUS_UPDATED, {
     onData: ({ data: subData }) => {
       const updated = subData?.data?.incidentStatusUpdated;
       if (updated) {
@@ -747,7 +773,7 @@ export default function DispatcherDashboard() {
     },
   });
 
-  useSubscription(ON_TEAM_STATUS_UPDATED, {
+  useSubscription<{ teamStatusUpdated: TeamStatusUpdate }>(ON_TEAM_STATUS_UPDATED, {
     onData: ({ data: subData }) => {
       const teamUpdated = subData?.data?.teamStatusUpdated;
       if (teamUpdated) {
@@ -1572,7 +1598,7 @@ export default function DispatcherDashboard() {
                 setFormError(null);
                 setIsAddTeamModalOpen(true);
               }}
-              className="border-2 border-dashed border-slate-800 hover:border-emerald-500/60 bg-slate-900/40 hover:bg-slate-900/80 p-8 rounded-2xl flex flex-col items-center justify-center gap-3 text-slate-400 hover:text-emerald-400 transition cursor-pointer min-h-[170px]"
+              className="border-2 border-dashed border-slate-800 hover:border-emerald-500/60 bg-slate-900/40 hover:bg-slate-900/80 p-8 rounded-2xl flex flex-col items-center justify-center gap-3 text-slate-400 hover:text-emerald-400 transition cursor-pointer min-h-42.5"
             >
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
                 <PlusCircle className="w-7 h-7 text-emerald-400" />

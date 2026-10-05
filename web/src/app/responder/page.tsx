@@ -233,7 +233,10 @@ export default function FireTeamResponderApp() {
     } catch {}
   }, []);
 
-  const { data, refetch, client, loading: loadingResponderData } = useQuery(GET_RESPONDER_DATA, {
+  const { data, refetch, client, loading: loadingResponderData } = useQuery<{
+    teams: any[];
+    incidents: any[];
+  }>(GET_RESPONDER_DATA, {
     pollInterval: 1500,
     fetchPolicy: 'network-only',
   });
@@ -1024,7 +1027,7 @@ export default function FireTeamResponderApp() {
               No completed missions logged for this squad yet.
             </div>
           ) : (
-            <div className="space-y-3 max-h-[550px] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-137.5 overflow-y-auto pr-1">
               {squadHistory.map((inc: any) => (
                 <div key={inc.id} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-2">
                   <div className="flex items-start justify-between">
