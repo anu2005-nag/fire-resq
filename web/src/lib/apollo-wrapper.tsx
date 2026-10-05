@@ -14,18 +14,12 @@ import type { DocumentNode } from 'graphql';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 function getGatewayUrls() {
-  if (typeof window !== 'undefined') {
-    const host = window.location.hostname;
-    const isSecure = window.location.protocol === 'https:';
-    return {
-      httpUrl: `${isSecure ? 'https' : 'http'}://${host}:4000/graphql`,
-      wsUrl: `${isSecure ? 'wss' : 'ws'}://${host}:4000/graphql`,
-    };
-  }
+  const defaultHttp = 'https://fire-resq.onrender.com/graphql';
+  const defaultWs = 'wss://fire-resq.onrender.com/graphql';
 
   return {
-    httpUrl: process.env.NEXT_PUBLIC_GATEWAY_URL ?? 'http://localhost:4000/graphql',
-    wsUrl: process.env.NEXT_PUBLIC_GATEWAY_WS_URL ?? 'ws://localhost:4000/graphql',
+    httpUrl: process.env.NEXT_PUBLIC_GATEWAY_URL || defaultHttp,
+    wsUrl: process.env.NEXT_PUBLIC_GATEWAY_WS_URL || defaultWs,
   };
 }
 
