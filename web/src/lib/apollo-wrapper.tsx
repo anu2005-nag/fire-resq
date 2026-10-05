@@ -14,8 +14,8 @@ import type { DocumentNode } from 'graphql';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 function getGatewayUrls() {
-  const defaultHttp = 'https://fire-resq.onrender.com/graphql';
-  const defaultWs = 'wss://fire-resq.onrender.com/graphql';
+  const defaultHttp = 'https://managing-hosts-framed-sullivan.trycloudflare.com/graphql';
+  const defaultWs = 'wss://managing-hosts-framed-sullivan.trycloudflare.com/graphql';
 
   return {
     httpUrl: process.env.NEXT_PUBLIC_GATEWAY_URL || defaultHttp,

@@ -75,7 +75,7 @@ services:
     environment:
       INCIDENT_SERVICE_URL: "incident-service:50051"
     ports:
-      - "4000:4000"
+      - "4001:4000"
     networks:
       - fireresq-network
 
